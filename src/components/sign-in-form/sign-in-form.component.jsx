@@ -1,85 +1,88 @@
-import React, { useState } from 'react'
-import { createUserDocumentFromAuth, signAuthUserWithEmailAndPassword, signInWithGooglePopup } from '../../utils/firebase/firebase.utils'
-import Button from '../button/button.component'
-import FormInput from '../form-input/form-input.component'
-import './sign-in-form.styles.scss'
+import React, { useState } from "react";
+import {
+  signAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
+} from "../../utils/firebase/firebase.utils";
+import Button from "../button/button.component";
+import FormInput from "../form-input/form-input.component";
+import "./sign-in-form.styles.scss";
 
 const defaultFormFields = {
-    email: '',
-    password: '',
-}
+  email: "",
+  password: "",
+};
 
 const SignInForm = () => {
+  const [formFields, setFormFields] = useState(defaultFormFields);
+  const { email, password } = formFields;
 
-    const [formFields, setFormFields] = useState(defaultFormFields)
-    const { email, password } = formFields;
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  };
 
-    const resetFormFields = () => {
-        setFormFields(defaultFormFields)
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await signAuthUserWithEmailAndPassword(email, password);
+      resetFormFields();
+
+    } catch (error) {
+      switch (error.code) {
+        case "auth/wrong-password":
+          alert("incorrect password for email");
+          break;
+        case "auth/user-not-found":
+          alert("no user associated with this email");
+          break;
+        default:
+          console.log(error);
+      }
     }
+  };
 
-    const signInWithGoogle = async () => {
-        const { user } = await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormFields({ ...formFields, [name]: value });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  return (
+    <div className="sign-up-container">
+      <h2>Already have an account</h2>
+      <span>Sign in with your email and password</span>
 
-        try {
-            const response = await signAuthUserWithEmailAndPassword(email, password)
-            console.log(response)
-            resetFormFields()
-        } catch (error) {
-            switch (error.code) {
-                case 'auth/wrong-password':
-                    alert('incorrect password for email')
-                    break
-                case 'auth/user-not-found':
-                    alert('no user associated with this email');
-                    break;
-                default:
-                    console.log(error)
-            }
-        }
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          type="email"
+          required
+          label="Email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+        />
 
-    }
+        <FormInput
+          type="password"
+          required
+          label="Password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+        />
 
-    const handleChange = e => {
-        const { name, value } = e.target;
-        setFormFields({ ...formFields, [name]: value })
-    }
-
-    return (
-        <div className='sign-up-container'>
-            <h2>Already have an account</h2>
-            <span>Sign in with your email and password</span>
-
-            <form onSubmit={handleSubmit}>
-
-                <FormInput
-                    type="email"
-                    required
-                    label='Email'
-                    name='email'
-                    value={email}
-                    onChange={handleChange} />
-
-                <FormInput
-                    type="password"
-                    required
-                    label='Password'
-                    name='password'
-                    value={password}
-                    onChange={handleChange} />
-
-                <div className="buttons-container">
-                    <Button>Sign In</Button>
-                    <Button type='button' onClick={signInWithGoogle} buttonType='google'>Google Sign In</Button>
-                </div>
-            </form>
+        <div className="buttons-container">
+          <Button>Sign In</Button>
+          <Button type="button" onClick={signInWithGoogle} buttonType="google">
+            Google Sign In
+          </Button>
         </div>
-    )
-}
+      </form>
+    </div>
+  );
+};
 
-export default SignInForm
+export default SignInForm;
