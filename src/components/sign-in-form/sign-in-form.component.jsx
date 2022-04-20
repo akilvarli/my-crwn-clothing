@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import {
-  signAuthUserWithEmailAndPassword,
+  signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
-} from "../../utils/firebase/firebase.utils";
-import Button from "../button/button.component";
+} from "../../utils/firebase/firebase.utils.js"
+import Button, {BUTTON_TYPE_CLASSES } from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
 import "./sign-in-form.styles.scss";
 
@@ -28,7 +28,7 @@ const SignInForm = () => {
     e.preventDefault();
 
     try {
-      await signAuthUserWithEmailAndPassword(email, password);
+      await signInAuthUserWithEmailAndPassword(email, password);
       resetFormFields();
 
     } catch (error) {
@@ -76,7 +76,7 @@ const SignInForm = () => {
 
         <div className="buttons-container">
           <Button>Sign In</Button>
-          <Button type="button" onClick={signInWithGoogle} buttonType="google">
+          <Button type="button" onClick={signInWithGoogle} buttonType={BUTTON_TYPE_CLASSES.google}>
             Google Sign In
           </Button>
         </div>
