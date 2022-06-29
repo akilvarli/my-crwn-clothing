@@ -69,7 +69,6 @@ const cartReducer = (state, action) => {
 };
 
 
-
 export const CartContext = createContext({
   isCartOpen: false,
   setIsCartOpen: () => {},
