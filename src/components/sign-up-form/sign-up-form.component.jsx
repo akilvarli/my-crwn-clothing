@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import Button from '../button/button.component'
 import FormInput from '../form-input/form-input.component'
-import './sign-up-form.styles.scss'
 import { useDispatch } from 'react-redux';
 import { signUpStart } from '../../store/user/user.action';
-
+import { SignUpContainer } from './sign-up-form.styles';
 
 const defaultFormFields = {
     displayName: '',
@@ -53,47 +52,48 @@ const SignUpForm = () => {
     }
 
     return (
-        <div className='sign-up-container'>
-            <h2>Don't have an account</h2>
-            <span>Sign up with your email and password</span>
-
-            <form onSubmit={handleSubmit}>
-
-                <FormInput type="text"
-                    required
-                    label='Display Name'
-                    name='displayName'
-                    value={displayName}
-                    onChange={handleChange} />
-
-                <FormInput
-                    type="email"
-                    required
-                    label='Email'
-                    name='email'
-                    value={email}
-                    onChange={handleChange} />
-
-                <FormInput
-                    type="password"
-                    required
-                    label='Password'
-                    name='password'
-                    value={password}
-                    onChange={handleChange} />
-
-                <FormInput
-                    type="password"
-                    required
-                    label='Confirm Password'
-                    name='confirmPassword'
-                    value={confirmPassword}
-                    onChange={handleChange} />
-
-                <Button buttonType="inverted">Sign up</Button>
-            </form>
-
-        </div>
+        <SignUpContainer>
+        <h2>Don't have an account?</h2>
+        <span>Sign up with your email and password</span>
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            label='Display Name'
+            type='text'
+            required
+            onChange={handleChange}
+            name='displayName'
+            value={displayName}
+          />
+  
+          <FormInput
+            label='Email'
+            type='email'
+            required
+            onChange={handleChange}
+            name='email'
+            value={email}
+          />
+  
+          <FormInput
+            label='Password'
+            type='password'
+            required
+            onChange={handleChange}
+            name='password'
+            value={password}
+          />
+  
+          <FormInput
+            label='Confirm Password'
+            type='password'
+            required
+            onChange={handleChange}
+            name='confirmPassword'
+            value={confirmPassword}
+          />
+          <Button type='submit'>Sign Up</Button>
+        </form>
+      </SignUpContainer>
     )
 }
 
